@@ -1,2 +1,2 @@
 source "http://rubygems.org"
-gem "mail"
+gemspec
