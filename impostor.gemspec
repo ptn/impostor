@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email           = 'tn.pablo@gmail.com'
   s.homepage        = 'http://github.com/ptn/impostor'
 
-  s.files           = Dir.glob("{bin,lib}/**/*") + %w(README)
+  s.files           = Dir.glob("{bin,lib}/**/*") + %w(README.md)
   s.executables     = ['impostor'] 
   s.require_path    = 'lib'
 
