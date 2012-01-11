@@ -9,7 +9,7 @@ module Impostor
     #
     # A <count> of -1 means to process all unread messages.
     #
-    def self.process(count=-1)
+    def self.process(count)
       unread = mailer.get_unread(count)
       unread.each do |ur|
         cmd = Commands.create(ur.subject, ur.body)
@@ -18,7 +18,7 @@ module Impostor
     end
 
     def self.process_all()
-      self.process
+      self.process(-1)
     end
 
     private
