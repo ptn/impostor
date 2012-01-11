@@ -7,7 +7,7 @@ module Impostor
     # For at least the last <count> unread emails in the server, fire off the
     # corresponding command.
     #
-    # A <count> of -1 means to process all unread messages.
+    # +count+ can be an integer or :all
     #
     def self.process(count)
       unread = mailer.get_unread(count)
@@ -15,10 +15,6 @@ module Impostor
         cmd = Commands.create(ur.subject, ur.body)
         cmd.run
       end
-    end
-
-    def self.process_all()
-      self.process(-1)
     end
 
     private

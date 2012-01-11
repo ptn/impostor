@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
 require 'impostor'
-Impostor::Server.process_all
+Impostor::Server.process :all
