@@ -12,13 +12,13 @@ interrogator.
 available to play at the moment, one will have to tell the truth and the other 
 will have to impersonate the first one. The system sends the following:
 
-* to the interrogator, the names and descriptions of A and B, and the game id
+to the interrogator, the names and descriptions of A and B, and the game id
 
-* to the impersonator, the following: "A game will start, you will be 
-  impersonating , here's her description: ".
+to the impersonator, the following: `A game will start, you will be 
+impersonating <other player's name>, here's her description: <description>`
 
-* to the 3rd player: "A game will start, you will tell the truth, here's the 
-  description you submitted: "
+to the 3rd player: `A game will start, you will tell the truth, here's the 
+description you submitted: <her own description>`
 
 3. The interrogator sends an email with `ASK <game id>` as the subject and her 
 question as the body.
@@ -29,11 +29,7 @@ question as the body.
 5. They both reply with their answers, respecting their role.
 
 6. The system relays the answers to the interrogator in one email, with the 
-format: "Player A: \n\n Player B: ".
-
-(Clarification: Emails sent between the interrogator and the server have 
-subject `ASK <game id>`, and between server and A and B have `ANSWER <game 
-id>`.)
+format: `Player A: \n\n Player B: `.
 
 7. Steps 3 to 6 repeat as many times as the interrogator wants. When she is 
 ready to take a guess, she sends email with subject `SOLVE <game id>` and the 
@@ -41,6 +37,10 @@ format: `A <name> \n\n B <name>`.
 
 8. The system emails all 3 players informing them if the interrogator succeeded 
 or not.
+
+(Clarification: Emails sent between the interrogator and the server have 
+subject `ASK <game id>`, and between server and A and B have `ANSWER <game 
+id>`.)
 
 
 ## Additional commands
