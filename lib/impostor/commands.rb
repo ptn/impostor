@@ -15,5 +15,13 @@ module Impostor
       puts "Hi! I'm a dummy command"
     end
 
+    command :question do |game_id, params|
+      puts "Someone asked in game #{game_id}: #{params[:question]}"
+    end
+
+    command :answer do |game_id, params|
+      puts "Someone answered in game #{game_id}: #{params[:answer]}"
+    end
+
   end
 end
