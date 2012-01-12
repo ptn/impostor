@@ -1,15 +1,11 @@
+require 'impostor/utils'
+
 module Impostor
   module Commands
+    extend Impostor::Utils::LazyEval
 
-    def self.run(name, game_id, params)
-      @commands[name].call game_id, params
-    end
-
-    def self.command(name, &callback)
-      #TODO Do real logging in the default block.
-      @commands ||= Hash.new { proc { puts "Command unknown" } }
-      @commands[name] = callback
-    end
+    #TODO Do real logging here.
+    lazy_eval :command, default: proc { proc { puts "Command unknown" } }
 
     command :dummy do
       puts "Hi! I'm a dummy command"
@@ -23,5 +19,8 @@ module Impostor
       puts "Someone answered in game #{game_id}: #{params[:answer]}"
     end
 
+    def self.run(name, game_id, params)
+      commands[name].call game_id, params
+    end
   end
 end
