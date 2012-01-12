@@ -7,7 +7,7 @@ module Impostor
 
     def self.command(name, &callback)
       #TODO Do real logging in the default block.
-      @commands ||= Hash.new { puts "Command unknown" }
+      @commands ||= Hash.new { proc { puts "Command unknown" } }
       @commands[name] = callback
     end
 
