@@ -1,4 +1,5 @@
 require 'impostor/mailer'
+require 'impostor/parsers/email_parser'
 require 'impostor/commands'
 
 module Impostor
@@ -9,11 +10,12 @@ module Impostor
     #
     # +count+ can be an integer or :all
     #
-    def self.process(count)
+    #TODO Should return something useful
+    def self.process(count, parser=Parsers::EmailParser)
       unread = mailer.get_unread(count)
       unread.each do |ur|
-        cmd = Commands.create(ur.subject, ur.body)
-        cmd.run
+        cmd_name, game_id, params = parser.parse(ur.subject, ur.body)
+        Commands.run cmd_name, game_id, params
       end
     end
 
