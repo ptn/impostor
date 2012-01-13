@@ -30,5 +30,16 @@ module Impostor
 
       Good luck!
     BODY
+
+    QUESTION = <<-BODY
+      The interrogator asks:
+
+      %{question}
+
+      Please send me mail with subject "ANSWER %{game_id}" with your answer.
+      Remember that you are playing %{role}, here's the description to play by:
+
+      %{description}
+    BODY
   end
 end

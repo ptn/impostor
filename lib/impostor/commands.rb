@@ -16,7 +16,7 @@ module Impostor
     end
 
     command :question do |sender, game, params|
-      puts "Someone asked in game #{game}: #{params[:question]}"
+      Mailer.new(game).send_question params[:question]
     end
 
     command :answer do |sender, game, params|

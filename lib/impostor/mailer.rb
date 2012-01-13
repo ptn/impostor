@@ -81,6 +81,26 @@ module Impostor
       )
     end
 
+    def send_question(q)
+      context = {
+        question: q,
+        game_id: @game.id,
+        description: @game.honest.description,
+      }
+
+      send_email_to(
+        @game.impostor.email,
+        "Game question",
+        Templates::QUESTION % context.merge({role: "impostor"})
+      )
+
+      send_email_to(
+        @game.honest.email,
+        "Game question",
+        Templates::QUESTION % context.merge({role: "honest"})
+      )
+    end
+
     def send_email_to(you, subject, body)
       me = @email_address
 
