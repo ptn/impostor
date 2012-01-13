@@ -20,8 +20,10 @@ module Impostor
         players.first(:role => "honest").user
       end
 
-      def random_player
-        players.all(:role.not => "interrogator").sample.user
+      def randomized_players
+        rand_players = players.all(:role.not => "interrogator")
+        rand_players = rand_players.sort_by { rand }
+        rand_players.map { |p| p.user }
       end
     end
   end
