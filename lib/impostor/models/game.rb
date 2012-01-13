@@ -8,6 +8,15 @@ module Impostor
       has n, :players
       has n, :users, :through => :players
 
+      def self.start(interrogator)
+        game = self.create
+        impersonator, honest = User.pick_for_new_game :exclude => interrogator
+        Player.create(:game => game, :user => interrogator, :role => "interrogator")
+        Player.create(:game => game, :user_id => impersonator.id, :role => "impostor")
+        Player.create(:game => game, :user_id => honest.id, :role => "honest")
+        game
+      end
+
       def interrogator
         players.first(:role => "interrogator").user
       end
