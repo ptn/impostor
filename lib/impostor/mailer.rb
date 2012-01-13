@@ -1,5 +1,6 @@
 require 'mail'
 require 'yaml'
+require 'impostor/templates'
 
 module Impostor
   class Mailer
@@ -22,32 +23,25 @@ module Impostor
     end
 
     def send_info_to_interrogator
-      a, b          = @game.randomized_players
       interrogator  = @game.interrogator.email
       me            = @email_address
-      id            = @game.id
+      a, b          = @game.randomized_players_as_users
+
+      context = {
+        game_id: @game.id,
+        email_a: a.email,
+        username_a: a.username,
+        description_a: a.description,
+        email_b: b.email,
+        username_b: b.username,
+        description_b: b.description,
+      }
 
       Mail.deliver do
         from    me
         to      interrogator
         subject "New game starting!"
-        body    <<-BODY
-                Hi, the new game you requested has started!
-
-                To start asking, send me mail with subject "QUESTION #{id}"
-
-                You will be playing with the following two players:
-
-                #{a.email}
-                #{a.username}
-
-                #{a.description}
-
-                #{b.email}
-                #{b.username}
-
-                #{b.description}
-        BODY
+        body    Templates::INFO_TO_INTERROGATOR % context
       end
     end
 
