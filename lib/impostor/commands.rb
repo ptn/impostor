@@ -7,8 +7,12 @@ module Impostor
     #TODO Do real logging here.
     lazy_eval :command, default: proc { proc { puts "Command unknown" } }
 
-    command :dummy do
-      puts "Hi! I'm a dummy command"
+    command :start do |sender, game, params|
+      game = Models::Game.start(sender)
+      mailer = Mailer.new(game)
+      mailer.send_info_to_interrogator
+      mailer.send_info_to_impersonator
+      mailer.send_info_to_honest
     end
 
     command :question do |sender, game, params|
