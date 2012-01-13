@@ -8,7 +8,7 @@ module Impostor
     lazy_eval :command, default: proc { proc { puts "Command unknown" } }
 
     command :start do |sender, game, params|
-      game = Models::Game.start(sender)
+      game = Game.start(sender)
       mailer = Mailer.new(game)
       mailer.send_info_to_interrogator
       mailer.send_info_to_impersonator
@@ -24,9 +24,9 @@ module Impostor
     end
 
     def self.run(name, sender_address, game_id, params)
-      sender = Models::User.first(:email => sender_address)
+      sender = User.first(:email => sender_address)
       if sender
-        game = Models::Game.get(game_id)
+        game = Game.get(game_id)
         commands[name].call sender, game, params
       end
     end
