@@ -9,9 +9,9 @@ module Impostor
 
     def self.start(interrogator)
       game = self.create
-      impersonator, honest = User.pick_for_new_game :exclude => interrogator
+      impostor, honest = User.pick_for_new_game :exclude => interrogator
       Player.create(:game => game, :user => interrogator, :role => "interrogator")
-      Player.create(:game => game, :user_id => impersonator.id, :role => "impostor")
+      Player.create(:game => game, :user_id => impostor.id, :role => "impostor")
       Player.create(:game => game, :user_id => honest.id, :role => "honest")
       game
     end
@@ -20,8 +20,8 @@ module Impostor
       players.first(:role => "interrogator").user
     end
 
-    def impersonator
-      players.first(:role => "impersonator").user
+    def impostor
+      players.first(:role => "impostor").user
     end
 
     def honest

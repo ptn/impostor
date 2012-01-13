@@ -11,7 +11,7 @@ module Impostor
       game = Game.start(sender)
       mailer = Mailer.new(game)
       mailer.send_info_to_interrogator
-      mailer.send_info_to_impersonator
+      mailer.send_info_to_impostor
       mailer.send_info_to_honest
     end
 
