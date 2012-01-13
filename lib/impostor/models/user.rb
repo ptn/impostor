@@ -15,6 +15,21 @@ module Impostor
       def self.available
         all(:available => true)
       end
+
+      def self.pick_for_new_game(opts)
+        query = <<-SQL
+      SELECT id, username, email, description
+      FROM impostor_models_users
+      WHERE id <> ?
+      AND available = 't'
+      ORDER BY RANDOM()
+      LIMIT 2
+        SQL
+
+        a, b = repository(:default).adapter.select(
+          query, [opts[:exclude].id]
+        )
+      end
     end
   end
 end
