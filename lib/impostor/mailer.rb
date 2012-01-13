@@ -24,7 +24,6 @@ module Impostor
 
     def send_info_to_interrogator
       interrogator  = @game.interrogator.email
-      me            = @email_address
       a, b          = @game.randomized_players_as_users
 
       context = {
@@ -37,17 +36,15 @@ module Impostor
         description_b: b.description,
       }
 
-      Mail.deliver do
-        from    me
-        to      interrogator
-        subject "New game starting!"
-        body    Templates::INFO_TO_INTERROGATOR % context
-      end
+      send_email_to(
+        interrogator,
+        "New game starting!",
+        Templates::INFO_TO_INTERROGATOR % context
+      )
     end
 
     def send_info_to_impostor
       impostor = @game.impostor.email
-      me           = @email_address
 
       context = {
         interrogator_username: @game.interrogator.username,
@@ -58,17 +55,15 @@ module Impostor
         description: @game.honest.description,
       }
 
-      Mail.deliver do
-        from    me
-        to      impostor
-        subject "New game starting!"
-        body    Templates::INFO_TO_PLAYER % context
-      end
+      send_email_to(
+        impostor,
+        "New game starting!",
+        Templates::INFO_TO_PLAYER % context
+      )
     end
 
     def send_info_to_honest
       honest = @game.honest.email
-      me     = @email_address
 
       context = {
         interrogator_username: @game.interrogator.username,
@@ -79,11 +74,21 @@ module Impostor
         description: @game.honest.description,
       }
 
+      send_email_to(
+        honest,
+        "New game starting!",
+        Templates::INFO_TO_PLAYER % context
+      )
+    end
+
+    def send_email_to(you, subject, body)
+      me = @email_address
+
       Mail.deliver do
         from    me
-        to      honest
-        subject "New game starting!"
-        body    Templates::INFO_TO_PLAYER % context
+        to      you
+        subject subject
+        body    body
       end
     end
 
