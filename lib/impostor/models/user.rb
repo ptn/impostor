@@ -11,6 +11,10 @@ module Impostor
 
       has n, :players
       has n, :games, :through => :players
+
+      def self.available
+        all(:available => true)
+      end
     end
   end
 end
