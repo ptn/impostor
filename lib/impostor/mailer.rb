@@ -45,10 +45,46 @@ module Impostor
       end
     end
 
-    def send_info_to_impersonator
+    def send_info_to_impostor
+      impostor = @game.impostor.email
+      me           = @email_address
+
+      context = {
+        interrogator_username: @game.interrogator.username,
+        interrogator_email: @game.interrogator.email,
+        other_username: @game.honest.username,
+        other_email: @game.honest.email,
+        role: "impostor",
+        description: @game.honest.description,
+      }
+
+      Mail.deliver do
+        from    me
+        to      impostor
+        subject "New game starting!"
+        body    Templates::INFO_TO_PLAYER % context
+      end
     end
 
     def send_info_to_honest
+      honest = @game.honest.email
+      me     = @email_address
+
+      context = {
+        interrogator_username: @game.interrogator.username,
+        interrogator_email: @game.interrogator.email,
+        other_username: @game.impostor.username,
+        other_email: @game.impostor.email,
+        role: "honest",
+        description: @game.honest.description,
+      }
+
+      Mail.deliver do
+        from    me
+        to      honest
+        subject "New game starting!"
+        body    Templates::INFO_TO_PLAYER % context
+      end
     end
 
     def configure_smtp(config)

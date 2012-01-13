@@ -15,7 +15,20 @@ module Impostor
                 %{username_b}
                 %{email_b}
 
-                %{description_b}
+      %{description_b}
+
+      Good luck!
+    BODY
+
+    INFO_TO_PLAYER = <<-BODY
+      Hi, you have been chosen to participate in a new game!
+
+      The game was started by %{interrogator_username} (%{interrogator_email}), the other player will be %{other_username} (%{other_email}).
+      You will be the %{role} player, so here's the description you have to play by:
+
+      %{description}
+
+      Good luck!
     BODY
   end
 end
