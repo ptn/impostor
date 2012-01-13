@@ -11,16 +11,20 @@ module Impostor
       puts "Hi! I'm a dummy command"
     end
 
-    command :question do |game_id, params|
-      puts "Someone asked in game #{game_id}: #{params[:question]}"
+    command :question do |sender, game, params|
+      puts "Someone asked in game #{game}: #{params[:question]}"
     end
 
-    command :answer do |game_id, params|
-      puts "Someone answered in game #{game_id}: #{params[:answer]}"
+    command :answer do |sender, game, params|
+      puts "Someone answered in game #{game}: #{params[:answer]}"
     end
 
-    def self.run(name, game_id, params)
-      commands[name].call game_id, params
+    def self.run(name, sender_address, game_id, params)
+      sender = Models::User.first(:email => sender_address)
+      if sender
+        game = Models::Game.get(game_id)
+        commands[name].call sender, game, params
+      end
     end
   end
 end
