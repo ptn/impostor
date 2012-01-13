@@ -39,7 +39,7 @@ format: `A <name> \n\n B <name>`.
 or not.
 
 (Clarification: Emails sent between the interrogator and the server have 
-subject `ASK <game id>`, and between server and A and B have `ANSWER <game 
+subject `QUESTION <game id>`, and between server and A and B have `ANSWER <game 
 id>`.)
 
 
