@@ -29,7 +29,7 @@ module Impostor
         players.first(:role => "honest").user
       end
 
-      def randomized_players
+      def randomized_players_as_users
         rand_players = players.all(:role.not => "interrogator")
         rand_players = rand_players.sort_by { rand }
         rand_players.map { |p| p.user }
