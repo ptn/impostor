@@ -9,12 +9,27 @@ module Impostor
     belongs_to :game
     has n, :answers
 
-    def add_answer(answer_text)
-      answer = Answer.create(:text => answer_text, :question => self)
+    def add_answer(answer_text, player)
+      answer = Answer.create(
+        :text => answer_text,
+        :question => self,
+        :player => player
+      )
+
       if answers.count == 2
-        answered = true
+        self.answered = true
         self.save
       end
+
+      answer
+    end
+
+    def answer_a
+      answers.select { |ans| ans.player.alias == "A" }
+    end
+
+    def answer_b
+      answers.select { |ans| ans.player.alias == "B" }
     end
   end
 end

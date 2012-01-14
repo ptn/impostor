@@ -10,10 +10,24 @@ module Impostor
 
     def self.start(interrogator)
       game = self.create
-      impostor, honest = User.pick_for_new_game :exclude => interrogator
       Player.create(:game => game, :user => interrogator, :role => "interrogator")
-      Player.create(:game => game, :user_id => impostor.id, :role => "impostor")
-      Player.create(:game => game, :user_id => honest.id, :role => "honest")
+
+      impostor, honest = User.pick_for_new_game :exclude => interrogator
+      impostor_alias, honest_alias = ["A", "B"].sort_by { rand }
+
+      Player.create(
+        :game => game,
+        :user_id => impostor.id,
+        :role => "impostor",
+        :alias => impostor_alias
+      )
+      Player.create(
+        :game => game,
+        :user_id => honest.id,
+        :role => "honest",
+        :alias => honest_alias
+      )
+
       game
     end
 
@@ -29,10 +43,12 @@ module Impostor
       players.first(:role => "honest").user
     end
 
-    def randomized_players_as_users
-      rand_players = players.all(:role.not => "interrogator")
-      rand_players = rand_players.sort_by { rand }
-      rand_players.map { |p| p.user }
+    def player_a
+      players.first(:alias => "A")
+    end
+
+    def player_b
+      players.first(:alias => "B")
     end
 
     def current_question

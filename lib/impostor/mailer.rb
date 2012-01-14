@@ -24,16 +24,15 @@ module Impostor
 
     def send_info_to_interrogator
       interrogator  = @game.interrogator.email
-      a, b          = @game.randomized_players_as_users
 
       context = {
         game_id: @game.id,
-        email_a: a.email,
-        username_a: a.username,
-        description_a: a.description,
-        email_b: b.email,
-        username_b: b.username,
-        description_b: b.description,
+        email_a: @game.player_a.user.email,
+        username_a: @game.player_a.user.username,
+        description_a: @game.player_a.user.description,
+        email_b: @game.player_b.user.email,
+        username_b: @game.player_b.user.username,
+        description_b: @game.player_b.user.description,
       }
 
       send_email_to(

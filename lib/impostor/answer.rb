@@ -6,6 +6,7 @@ module Impostor
     property :text, Text, :required => true
 
     belongs_to :question
+    belongs_to :player
 
     def game
       question.game
