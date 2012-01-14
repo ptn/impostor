@@ -62,5 +62,11 @@ module Impostor
         end
       end
     end
+
+    command :edit do |sender, params|
+      sender.description = params[:description]
+      sender.save
+      Mailer.new.confirm_new_description(sender)
+    end
   end
 end

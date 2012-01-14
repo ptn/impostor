@@ -111,6 +111,14 @@ module Impostor
       end
     end
 
+    def confirm_new_description(sender)
+      send_email_to(
+        sender.email,
+        "Your description was updated",
+        Templates::NEW_DESCRIPTION % { description: sender.description }
+      )
+    end
+
     def send_email_to(you, subject, body)
       me = @email_address
 

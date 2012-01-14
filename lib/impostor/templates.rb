@@ -89,5 +89,11 @@ module Impostor
     PLAYERS_LOSE = <<-BODY
       The interrogator guessed correctly! You lose!
     BODY
+
+    NEW_DESCRIPTION = <<-BODY
+      Done! Your new description now is:
+
+      %{description}
+    BODY
   end
 end

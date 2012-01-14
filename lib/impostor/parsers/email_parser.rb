@@ -10,6 +10,10 @@ module Impostor
         #this breaks the encapsulation!
         default: proc { |hash, key| proc { |body| { key => body } } }
 
+      body_parser :edit do |body|
+        { :description => body }
+      end
+
       #
       # Extracts the name of the command to run and it's parameters.
       #
