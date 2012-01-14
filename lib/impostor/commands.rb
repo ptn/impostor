@@ -8,7 +8,9 @@ module Impostor
     store_procs_with :command, default: proc { proc { puts "Command unknown" } }
 
     def self.run(name, sender, params, game)
-      commands[name].call sender, params, game
+      if name == :register || !sender.nil?
+        commands[name].call sender, params, game
+      end
     end
 
     command :start do |sender, params|
