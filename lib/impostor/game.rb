@@ -2,7 +2,10 @@ module Impostor
   class Game
     include DataMapper::Resource
 
-    property :id, Serial
+    property :id,       Serial
+    property :finished, Boolean, :default => false
+    property :guess,    String
+    property :won,      Boolean, :default => false
 
     has n, :players
     has n, :users, :through => :players
@@ -29,6 +32,15 @@ module Impostor
       )
 
       game
+    end
+
+    def take_guess(guessed_impersonator_username)
+      self.finished = true
+      self.guess    = guessed_impersonator_username
+      self.won      = (self.guess == impostor.username)
+      self.save
+
+      self.won
     end
 
     def interrogator

@@ -131,6 +131,38 @@ module Impostor
       )
     end
 
+    def win
+      send_email_to(
+        @game.interrogator.email,
+        "You Win!",
+        Templates::INTERROGATOR_WIN
+      )
+
+      [@game.impostor, @game.honest].each do |user|
+        send_email_to(
+          user.email,
+          "You Lose :-(",
+          Templates::PLAYERS_LOSE
+        )
+      end
+    end
+
+    def lose
+      send_email_to(
+        @game.interrogator.email,
+        "You Lose :-(",
+        Templates::INTERROGATOR_LOSE
+      )
+
+      [@game.impostor, @game.honest].each do |user|
+        send_email_to(
+          user.email,
+          "You Win!",
+          Templates::PLAYERS_WIN
+        )
+      end
+    end
+
     def send_email_to(you, subject, body)
       me = @email_address
 

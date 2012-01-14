@@ -63,8 +63,7 @@ module Impostor
       To ask another question, send me email with subject "QUESTION %{game_id}".
 
       To take your guess, send me email with subject "GUESS %{game_id}" and
-      the username of your guess for player A on the first line and for
-      player B on the second.
+      the username of which player (A or B) you think is the impersonator.
     BODY
 
     REJECTED_ANSWER = <<-BODY
@@ -73,6 +72,22 @@ module Impostor
       %{answer}
 
       was rejected, because you can't answer the same question more than once.
+    BODY
+
+    INTERROGATOR_WIN = <<-BODY
+      Your guess was correct! Congratulations!
+    BODY
+
+    PLAYERS_WIN = <<-BODY
+      The interregotor couldn't guess your roles! Congratulations!
+    BODY
+
+    INTERROGATOR_LOSE = <<-BODY
+      Nu-uh! That's not right - you lose!
+    BODY
+
+    PLAYERS_LOSE = <<-BODY
+      The interrogator guessed correctly! You lose!
     BODY
   end
 end

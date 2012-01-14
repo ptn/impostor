@@ -6,12 +6,9 @@ module Impostor
       extend Impostor::Utils::LazyEval
 
       lazy_eval :body_parser,
-        default: proc { |h, k| proc { |email_body| { k => email_body } } }
+        default: proc { |h, k| proc { |body| { k => body } } }
 
-      body_parser :dummy do
-        nil
-      end
-
+      # Needs more work: breaks with HTML, should strip signatures, etc.
       def self.parse(subject, body)
         name, game_id = subject.split
         name = name.downcase.to_sym

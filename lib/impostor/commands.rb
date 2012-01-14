@@ -49,6 +49,18 @@ module Impostor
       end
     end
 
+    command :guess do |sender, game, params|
+      if sender == game.interrogator
+        mailer = Mailer.new(game)
+
+        if game.take_guess(params[:guess])
+          mailer.win
+        else
+          mailer.lose
+        end
+      end
+    end
+
     def self.run(name, sender_address, game_id, params)
       sender = User.first(:email => sender_address)
       if sender
