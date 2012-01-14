@@ -17,7 +17,7 @@ module Impostor
       unread = mailer.get_unread(count)
       unread.each do |ur|
         cmd_name, sender, game, params = parser.parse(ur.from, ur.subject, ur.body)
-        Commands.run cmd_name, sender, game, params if sender
+        Commands.run cmd_name, sender, params, game if sender
       end
     end
 

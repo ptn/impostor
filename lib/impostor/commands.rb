@@ -7,18 +7,18 @@ module Impostor
     #TODO Do real logging here.
     store_procs_with :command, default: proc { proc { puts "Command unknown" } }
 
-    def self.run(name, sender, game, params)
-      commands[name].call sender, game, params
+    def self.run(name, sender, params, game)
+      commands[name].call sender, params, game
     end
 
-    command :start do |sender, game, params|
+    command :start do |sender, params|
       game = Game.start(sender)
 
       mailer = Mailer.new(game)
       mailer.send_info
     end
 
-    command :question do |sender, game, params|
+    command :question do |sender, params, game|
       if sender == game.interrogator
         mailer = Mailer.new(game)
 
@@ -33,7 +33,7 @@ module Impostor
       end
     end
 
-    command :answer do |sender, game, params|
+    command :answer do |sender, params, game|
       if sender == game.impostor || sender == game.honest
         question = game.current_question
         player = Player.first(:user => sender, :game => game)
@@ -51,7 +51,7 @@ module Impostor
       end
     end
 
-    command :guess do |sender, game, params|
+    command :guess do |sender, params, game|
       if sender == game.interrogator
         mailer = Mailer.new(game)
 
