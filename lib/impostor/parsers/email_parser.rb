@@ -5,17 +5,17 @@ module Impostor
     module EmailParser
       extend Impostor::Utils::LazyEval
 
-      lazy_eval :params_parser,
+      lazy_eval :body_parser,
         default: proc { |h, k| proc { |email_body| { k => email_body } } }
 
-      params_parser :dummy do
+      body_parser :dummy do
         nil
       end
 
       def self.parse(subject, body)
         name, game_id = subject.split
         name = name.downcase.to_sym
-        params = params_parsers[name].call body
+        params = body_parsers[name].call body
         [name, game_id, params]
       end
     end
