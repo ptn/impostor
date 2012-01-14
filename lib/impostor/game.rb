@@ -6,6 +6,7 @@ module Impostor
 
     has n, :players
     has n, :users, :through => :players
+    has n, :questions
 
     def self.start(interrogator)
       game = self.create
