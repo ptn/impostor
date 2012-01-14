@@ -81,6 +81,14 @@ module Impostor
       )
     end
 
+    def reject_question
+      send_email_to(
+        @game.interrogator.email,
+        "Question rejected",
+        Templates::REJECTED_QUESTION
+      )
+    end
+
     def send_question(question)
       context = {
         question: question.text,

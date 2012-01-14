@@ -41,5 +41,9 @@ module Impostor
 
       %{description}
     BODY
+
+    REJECTED_QUESTION = <<-BODY
+      Sorry, you have to wait for every player to answer your previous question before asking a new one.
+    BODY
   end
 end
