@@ -17,15 +17,17 @@ module Impostor
     end
 
     command :question do |sender, game, params|
-      mailer = Mailer.new(game)
+      if sender == game.interrogator
+        mailer = Mailer.new(game)
 
-      #TODO Enforce that a game can only have one unanswered question at the
-      #model layer.
-      if game.current_question
-        mailer.reject_question
-      else
-        question = Question.create(:text => params[:question], :game => game)
-        mailer.send_question question
+        #TODO Enforce that a game can only have one unanswered question at the
+        #model layer.
+        if game.current_question
+          mailer.reject_question
+        else
+          question = Question.create(:text => params[:question], :game => game)
+          mailer.send_question question
+        end
       end
     end
 
