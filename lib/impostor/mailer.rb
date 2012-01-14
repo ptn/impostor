@@ -108,6 +108,21 @@ module Impostor
       )
     end
 
+    def send_answers(question)
+      context = {
+        question: question.text,
+        answer_a: question.answer_a.text,
+        answer_b: question.answer_b.text,
+        game_id: @game.id,
+      }
+
+      send_email_to(
+        @game.interrogator.email,
+        "Answers for question on game #{@game.id}",
+        Templates::ANSWER % context
+      )
+    end
+
     def send_email_to(you, subject, body)
       me = @email_address
 

@@ -45,5 +45,22 @@ module Impostor
     REJECTED_QUESTION = <<-BODY
       Sorry, you have to wait for every player to answer your previous question before asking a new one.
     BODY
+
+    ANSWER = <<-BODY
+      Your latest question was:
+
+      %{question}
+
+      Here are the answers of both players:
+
+      Player A:
+      %{answer_a}
+
+      Player B:
+      %{answer_b}
+
+
+      To ask another question, send me email with subject "QUESTION %{game_id}".
+    BODY
   end
 end

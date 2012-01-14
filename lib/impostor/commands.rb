@@ -32,7 +32,16 @@ module Impostor
     end
 
     command :answer do |sender, game, params|
-      puts "Someone answered in game #{game}: #{params[:answer]}"
+      if sender == game.impostor || sender == game.honest
+        question = game.current_question
+        player = Player.first(:user => sender, :game => game)
+
+        answer = question.add_answer(params[:answer], player)
+
+        if question.answered?
+          Mailer.new(game).send_answers(question)
+        end
+      end
     end
 
     def self.run(name, sender_address, game_id, params)
