@@ -111,11 +111,32 @@ module Impostor
       end
     end
 
-    def confirm_new_description(sender)
+    def confirm_new_description(user)
       send_email_to(
-        sender.email,
+        user.email,
         "Your description was updated",
         Templates::NEW_DESCRIPTION % { description: sender.description }
+      )
+    end
+
+    def confirm_registration(user)
+      context = {
+        status: user.status,
+        can:    user.available? ? "can" : "won't",
+      }
+
+      send_email_to(
+        user.email,
+        "Welcome!",
+        Templates::CONFIRM_REGISTRATION % context
+      )
+    end
+
+    def reject_registration(applicant)
+      send_email_to(
+        applicant.email,
+        "Registration rejected",
+        Templates::REJECT_REGISTRATION
       )
     end
 

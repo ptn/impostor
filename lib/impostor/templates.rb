@@ -95,5 +95,28 @@ module Impostor
 
       %{description}
     BODY
+
+    CONFIRM_REGISTRATION = <<-BODY
+      Welcome! Your registration was sucessful.
+
+      You registered as %{status}, so you %{can} be chosen for new games.
+
+      To be an interrogator, send me email with subject "START".
+    BODY
+
+    REJECT_REGISTRATION = <<-BODY
+      We are sorry, your registration failed. Please make sure your
+      sign-up mail follows the format:
+
+      username
+
+      description
+      of yourself
+      which may span
+      multiple
+      lines
+
+      unavailable (this is optional)
+    BODY
   end
 end

@@ -15,6 +15,34 @@ module Impostor
       end
 
       #
+      # Extracts username, description and optionally the 'unavailable' status.
+      # Returns that information plus the email address of the sender.
+      #
+      # The body is expected to follow the format:
+      #
+      # username
+      #
+      # description
+      # maybe this spans
+      # multiple
+      # lines
+      #
+      # unavailable (this is optional)
+      #
+      body_parser :register do |body, from|
+        username, descr, status = body.split("\n\n")
+
+        available = status.nil? ? true : status.downcase != "unavailable"
+
+        {
+          email: from,
+          username: username,
+          description: descr,
+          available: available,
+        }
+      end
+
+      #
       # Extracts the name of the command to run and it's parameters.
       #
       # This method only parsers the subject of the mail, the body is parsed by
@@ -32,7 +60,7 @@ module Impostor
         name, game_id = subject.split
 
         name = name.downcase.to_sym
-        params = body_parsers[name].call body
+        params = body_parsers[name].call body, from
 
         sender = User.first(:email => from)
         game = Game.get(game_id)

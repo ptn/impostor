@@ -70,5 +70,19 @@ module Impostor
       sender.save
       Mailer.new.confirm_new_description(sender)
     end
+
+    command :register do |sender, params|
+      unless sender
+        user = User.new(params)
+        mailer = Mailer.new
+
+        if user.save
+          mailer.confirm_registration(user)
+        else
+          mailer.reject_registration(user)
+        end
+      end
+    end
+
   end
 end

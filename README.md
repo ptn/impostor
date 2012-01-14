@@ -52,5 +52,8 @@ id>`.)
   `AVAILABLE` as the subject and an empty body; when they don't want to be 
 chosen, they send `UNAVAILABLE` instead.
 
+* Users can register directly as unavailable by sending `unavailable` at the 
+  end of the body of their sign up email.
+
 * Players can send a new description of themselves by using `EDIT` as the 
   subject.
