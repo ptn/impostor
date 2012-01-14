@@ -8,14 +8,16 @@ module Impostor
     # For at least the last <count> unread emails in the server, fire off the
     # corresponding command.
     #
+    # If a command was sent by a non-registered user, ignore it.
+    #
     # +count+ can be an integer or :all
     #
     #TODO Should return something useful
     def self.process(count, parser=Parsers::EmailParser)
       unread = mailer.get_unread(count)
       unread.each do |ur|
-        cmd_name, game_id, params = parser.parse(ur.subject, ur.body)
-        Commands.run cmd_name, ur.from, game_id, params
+        cmd_name, sender, game, params = parser.parse(ur.from, ur.subject, ur.body)
+        Commands.run cmd_name, sender, game, params if sender
       end
     end
 

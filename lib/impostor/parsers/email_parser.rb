@@ -17,18 +17,21 @@ module Impostor
       # not provided for a given command, the result will be a mapping from the
       # command name to the complete body of the email.
       #
-      # Returns the name of the command, the game and the parameters
-      # hash.
+      # Returns the name of the command, the issuing user, the game and the
+      # parameters hash.
       #
       # FIXME: breaks with HTML, should strip signatures, etc.
       #
-      def self.parse(subject, body)
+      def self.parse(from, subject, body)
         name, game_id = subject.split
 
         name = name.downcase.to_sym
         params = body_parsers[name].call body
 
-        [name, game_id, params]
+        sender = User.first(:email => from)
+        game = Game.get(game_id)
+
+        [name, sender, game, params]
       end
     end
   end
