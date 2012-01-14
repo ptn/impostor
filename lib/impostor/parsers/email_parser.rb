@@ -3,9 +3,11 @@ require 'impostor/utils'
 module Impostor
   module Parsers
     module EmailParser
-      extend Impostor::Utils::LazyEval
+      extend Utils::StoreProcs
 
-      lazy_eval :body_parser,
+      store_procs_with :body_parser,
+        #FIXME Client code of StoreProcs should not know that it uses a hash,
+        #this breaks the encapsulation!
         default: proc { |hash, key| proc { |body| { key => body } } }
 
       #

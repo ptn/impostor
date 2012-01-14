@@ -2,10 +2,10 @@ require 'impostor/utils'
 
 module Impostor
   module Commands
-    extend Impostor::Utils::LazyEval
+    extend Utils::StoreProcs
 
     #TODO Do real logging here.
-    lazy_eval :command, default: proc { proc { puts "Command unknown" } }
+    store_procs_with :command, default: proc { proc { puts "Command unknown" } }
 
     def self.run(name, sender, game, params)
       commands[name].call sender, game, params
