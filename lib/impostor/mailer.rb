@@ -22,62 +22,10 @@ module Impostor
       Mail.last :count => count
     end
 
-    def send_info_to_interrogator
-      interrogator  = @game.interrogator.email
-
-      context = {
-        game_id: @game.id,
-        email_a: @game.player_a.user.email,
-        username_a: @game.player_a.user.username,
-        description_a: @game.player_a.user.description,
-        email_b: @game.player_b.user.email,
-        username_b: @game.player_b.user.username,
-        description_b: @game.player_b.user.description,
-      }
-
-      send_email_to(
-        interrogator,
-        "New game starting!",
-        Templates::INFO_TO_INTERROGATOR % context
-      )
-    end
-
-    def send_info_to_impostor
-      impostor = @game.impostor.email
-
-      context = {
-        interrogator_username: @game.interrogator.username,
-        interrogator_email: @game.interrogator.email,
-        other_username: @game.honest.username,
-        other_email: @game.honest.email,
-        role: "impostor",
-        description: @game.honest.description,
-      }
-
-      send_email_to(
-        impostor,
-        "New game starting!",
-        Templates::INFO_TO_PLAYER % context
-      )
-    end
-
-    def send_info_to_honest
-      honest = @game.honest.email
-
-      context = {
-        interrogator_username: @game.interrogator.username,
-        interrogator_email: @game.interrogator.email,
-        other_username: @game.impostor.username,
-        other_email: @game.impostor.email,
-        role: "honest",
-        description: @game.honest.description,
-      }
-
-      send_email_to(
-        honest,
-        "New game starting!",
-        Templates::INFO_TO_PLAYER % context
-      )
+    def send_info
+      send_info_to_interrogator
+      send_info_to_impostor
+      send_info_to_honest
     end
 
     def reject_question
@@ -196,6 +144,64 @@ module Impostor
       config["smtp"] = config["smtp"].inject({}) { |memo, (k, v)| memo[k.to_sym] = v; memo }
       config["pop3"] = config["pop3"].inject({}) { |memo, (k, v)| memo[k.to_sym] = v; memo }
       config.inject({}) { |memo, (k, v)| memo[k.to_sym] = v; memo }
+    end
+
+    def send_info_to_interrogator
+      interrogator  = @game.interrogator.email
+
+      context = {
+        game_id: @game.id,
+        email_a: @game.player_a.user.email,
+        username_a: @game.player_a.user.username,
+        description_a: @game.player_a.user.description,
+        email_b: @game.player_b.user.email,
+        username_b: @game.player_b.user.username,
+        description_b: @game.player_b.user.description,
+      }
+
+      send_email_to(
+        interrogator,
+        "New game starting!",
+        Templates::INFO_TO_INTERROGATOR % context
+      )
+    end
+
+    def send_info_to_impostor
+      impostor = @game.impostor.email
+
+      context = {
+        interrogator_username: @game.interrogator.username,
+        interrogator_email: @game.interrogator.email,
+        other_username: @game.honest.username,
+        other_email: @game.honest.email,
+        role: "impostor",
+        description: @game.honest.description,
+      }
+
+      send_email_to(
+        impostor,
+        "New game starting!",
+        Templates::INFO_TO_PLAYER % context
+      )
+    end
+
+    def send_info_to_honest
+      honest = @game.honest.email
+
+      context = {
+        interrogator_username: @game.interrogator.username,
+        interrogator_email: @game.interrogator.email,
+        other_username: @game.impostor.username,
+        other_email: @game.impostor.email,
+        role: "honest",
+        description: @game.honest.description,
+      }
+
+      send_email_to(
+        honest,
+        "New game starting!",
+        Templates::INFO_TO_PLAYER % context
+      )
     end
   end
 end
