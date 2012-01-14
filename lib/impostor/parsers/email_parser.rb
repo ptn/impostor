@@ -37,7 +37,7 @@ module Impostor
         sender = User.first(:email => from)
         game = Game.get(game_id)
 
-        [name, sender, game, params]
+        [name, sender, params, game]
       end
     end
   end
