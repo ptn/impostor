@@ -29,5 +29,9 @@ module Impostor
         query, [opts[:exclude].id]
       )
     end
+
+    def status
+      self.available? ? :available : :unavailable
+    end
   end
 end
