@@ -25,11 +25,11 @@ module Impostor
     end
 
     def answer_a
-      answers.select { |ans| ans.player.alias == "A" }
+      answers.select { |ans| ans.player.alias == "A" }.first
     end
 
     def answer_b
-      answers.select { |ans| ans.player.alias == "B" }
+      answers.select { |ans| ans.player.alias == "B" }.first
     end
   end
 end
