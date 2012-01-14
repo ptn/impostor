@@ -38,8 +38,13 @@ module Impostor
 
         answer = question.add_answer(params[:answer], player)
 
-        if question.answered?
-          Mailer.new(game).send_answers(question)
+        mailer = Mailer.new(game)
+        if answer
+          if question.answered?
+            mailer.send_answers(question)
+          end
+        else
+          mailer.reject_answer(sender, params[:answer])
         end
       end
     end

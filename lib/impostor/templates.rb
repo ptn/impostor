@@ -62,5 +62,13 @@ module Impostor
 
       To ask another question, send me email with subject "QUESTION %{game_id}".
     BODY
+
+    REJECTED_ANSWER = <<-BODY
+      We are sorry, your answer:
+
+      %{answer}
+
+      was rejected, because you can't answer the same question more than once.
+    BODY
   end
 end

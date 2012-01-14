@@ -123,6 +123,14 @@ module Impostor
       )
     end
 
+    def reject_answer(user, answer)
+      send_email_to(
+        user.email,
+        "Rejected answer",
+        Templates::REJECTED_ANSWER % { answer: answer }
+      )
+    end
+
     def send_email_to(you, subject, body)
       me = @email_address
 

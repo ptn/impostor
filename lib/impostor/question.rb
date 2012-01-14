@@ -10,18 +10,24 @@ module Impostor
     has n, :answers
 
     def add_answer(answer_text, player)
-      answer = Answer.create(
-        :text => answer_text,
-        :question => self,
-        :player => player
-      )
+      unless already_answered? player
+        answer = Answer.create(
+          :text => answer_text,
+          :question => self,
+          :player => player
+        )
 
-      if answers.count == 2
-        self.answered = true
-        self.save
+        if answers.count == 2
+          self.answered = true
+          self.save
+        end
+
+        answer
       end
+    end
 
-      answer
+    def already_answered?(player)
+      answers.first(:player => player)
     end
 
     def answer_a
