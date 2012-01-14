@@ -14,7 +14,7 @@ module Impostor
     def self.process(count, parser=Parsers::EmailParser)
       unread = mailer.get_unread(count)
       unread.each do |ur|
-        args = parser.parse(ur.from, ur.subject, ur.body.decoded)
+        args = parser.parse(ur.from.first, ur.subject, ur.body.decoded)
         Commands.run *args
       end
     end
