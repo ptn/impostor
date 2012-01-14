@@ -9,6 +9,8 @@ end
 
 require 'impostor/user'
 require 'impostor/game'
+require 'impostor/question'
+require 'impostor/answer'
 require 'impostor/player'
 
 DataMapper.finalize

@@ -81,9 +81,9 @@ module Impostor
       )
     end
 
-    def send_question(q)
+    def send_question(question)
       context = {
-        question: q,
+        question: question.text,
         game_id: @game.id,
         description: @game.honest.description,
       }

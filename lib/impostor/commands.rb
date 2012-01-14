@@ -16,7 +16,9 @@ module Impostor
     end
 
     command :question do |sender, game, params|
-      Mailer.new(game).send_question params[:question]
+      question = Question.create(:text => params[:question], :game => game)
+
+      Mailer.new(game).send_question question
     end
 
     command :answer do |sender, game, params|
