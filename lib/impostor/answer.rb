@@ -3,9 +3,13 @@ module Impostor
     include DataMapper::Resource
 
     property :id,   Serial
-    property :text, Text
+    property :text, Text, :required => true
 
     belongs_to :question
+
+    def game
+      question.game
+    end
   end
 end
 

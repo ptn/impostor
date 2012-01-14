@@ -34,5 +34,9 @@ module Impostor
       rand_players = rand_players.sort_by { rand }
       rand_players.map { |p| p.user }
     end
+
+    def current_question
+      questions.first(:answered => false)
+    end
   end
 end
