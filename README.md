@@ -32,8 +32,9 @@ question as the body.
 format: `Player A: \n\n Player B: `.
 
 7. Steps 3 to 6 repeat as many times as the interrogator wants. When she is 
-ready to take a guess, she sends email with subject `SOLVE <game id>` and the 
-format: `A <name> \n\n B <name>`.
+   ready to take a guess, she sends email with subject `GUESS <game id>` and 
+the format: `<guessed username for player A> \n <guesses username for player 
+B>`.
 
 8. The system emails all 3 players informing them if the interrogator succeeded 
 or not.

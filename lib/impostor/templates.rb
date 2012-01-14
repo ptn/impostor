@@ -61,6 +61,10 @@ module Impostor
 
 
       To ask another question, send me email with subject "QUESTION %{game_id}".
+
+      To take your guess, send me email with subject "GUESS %{game_id}" and
+      the username of your guess for player A on the first line and for
+      player B on the second.
     BODY
 
     REJECTED_ANSWER = <<-BODY
