@@ -1,6 +1,16 @@
 module Impostor
   module Utils
     module StoreProcs
+      #
+      # A macro that defines a macro for storing blocks.
+      #
+      # This method takes a symbol and defines:
+      #
+      # * a class method with that name that stores blocks in a hash
+      #
+      # * a private instance method with the name pluralized for accessing said
+      # hash
+      #
       def store_procs_with(name, opts={})
         plural = opts[:plural] || name.to_s + "s"
 
