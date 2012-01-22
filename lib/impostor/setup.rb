@@ -7,11 +7,11 @@ module Impostor
 end
 
 
-require 'impostor/user'
-require 'impostor/game'
-require 'impostor/question'
-require 'impostor/answer'
-require 'impostor/player'
+require_relative 'user'
+require_relative 'game'
+require_relative 'question'
+require_relative 'answer'
+require_relative 'player'
 
 DataMapper.finalize
 DataMapper.auto_upgrade!

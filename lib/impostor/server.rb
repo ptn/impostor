@@ -1,6 +1,6 @@
-require 'impostor/mailer'
-require 'impostor/parsers/email_parser'
-require 'impostor/commands'
+require_relative 'mailer'
+require_relative 'parsers/email_parser'
+require_relative 'commands'
 
 module Impostor
   module Server

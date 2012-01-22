@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'impostor'
+require_relative '../lib/impostor'
 Impostor::Server.process :all

@@ -1,6 +1,6 @@
 require 'mail'
-require 'impostor/templates'
 
+require_relative 'templates'
 require_relative '../../config/mail_configuration'
 
 module Impostor

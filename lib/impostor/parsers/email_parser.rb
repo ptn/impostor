@@ -1,4 +1,4 @@
-require 'impostor/utils'
+require_relative '../utils'
 
 module Impostor
   module Parsers
