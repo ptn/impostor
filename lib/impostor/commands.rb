@@ -7,68 +7,68 @@ module Impostor
     #TODO Do real logging here.
     store_procs_with :command, default: proc { proc { puts "Command unknown" } }
 
+    def initialize(presenter=Mailer.new)
+      @presenter = presenter
+    end
+
     def run(name, sender, params, game)
       if name == :register || !sender.nil?
-        commands[name].call sender, params, game
+        commands[name].call sender, params, @presenter, game
       end
     end
 
-    command :start do |sender, params|
+    command :start do |sender, params, presenter|
       game = Game.start(sender)
 
-      mailer = Mailer.new(game)
-      mailer.send_info
+      presenter.send_info(game)
     end
 
-    command :question do |sender, params, game|
+    command :question do |sender, params, presenter, game|
       if sender == game.interrogator
-        mailer = Mailer.new(game)
 
         #TODO Enforce that a game can only have one unanswered question at the
         #model layer.
         if game.current_question
-          mailer.reject_question
+          presenter.reject_question(game)
         else
           question = Question.create(:text => params[:question], :game => game)
-          mailer.send_question question
+          presenter.send_question(game, question)
         end
       end
     end
 
-    command :answer do |sender, params, game|
+    command :answer do |sender, params, presenter, game|
       if sender == game.impostor || sender == game.honest
         question = game.current_question
         player = Player.first(:user => sender, :game => game)
 
         answer = question.add_answer(params[:answer], player)
 
-        mailer = Mailer.new(game)
         if answer
           if question.answered?
-            mailer.send_answers(question)
+            presenter.send_answers(game, question)
           end
         else
-          mailer.reject_answer(sender, params[:answer])
+          presenter.reject_answer(game, sender, params[:answer])
         end
       end
     end
 
-    command :guess do |sender, params, game|
+    command :guess do |sender, params, presenter, game|
       if sender == game.interrogator
-        mailer = Mailer.new(game)
 
         if game.take_guess(params[:guess])
-          mailer.win
+          presenter.win(game)
         else
-          mailer.lose
+          presenter.lose(game)
         end
       end
     end
 
-    command :edit do |sender, params|
+    command :edit do |sender, params, presenter|
       sender.description = params[:description]
       sender.save
-      Mailer.new.confirm_new_description(sender)
+      presenter.confirm_new_description(sender)
     end
   end
 end

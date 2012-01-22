@@ -5,8 +5,7 @@ require_relative '../../config/mail_configuration'
 
 module Impostor
   class Mailer
-    def initialize(game=nil)
-      @game = game
+    def initialize
       @email_address = MailConfiguration::SMTP::USER_NAME + "@" +
         MailConfiguration::SMTP::DOMAIN
 
@@ -23,56 +22,56 @@ module Impostor
       Mail.last :count => count
     end
 
-    def send_info
-      send_info_to_interrogator
-      send_info_to_impostor
-      send_info_to_honest
+    def send_info(game)
+      send_info_to_interrogator(game)
+      send_info_to_impostor(game)
+      send_info_to_honest(game)
     end
 
-    def reject_question
+    def reject_question(game)
       send_email_to(
-        @game.interrogator.email,
+        game.interrogator.email,
         "Question rejected",
         Templates::REJECTED_QUESTION
       )
     end
 
-    def send_question(question)
+    def send_question(game, question)
       context = {
         question: question.text,
-        game_id: @game.id,
-        description: @game.honest.description,
+        game_id: game.id,
+        description: game.honest.description,
       }
 
       send_email_to(
-        @game.impostor.email,
+        game.impostor.email,
         "Game question",
         Templates::QUESTION % context.merge({role: "impostor"})
       )
 
       send_email_to(
-        @game.honest.email,
+        game.honest.email,
         "Game question",
         Templates::QUESTION % context.merge({role: "honest"})
       )
     end
 
-    def send_answers(question)
+    def send_answers(game, question)
       context = {
         question: question.text,
         answer_a: question.answer_a.text,
         answer_b: question.answer_b.text,
-        game_id: @game.id,
+        game_id: game.id,
       }
 
       send_email_to(
-        @game.interrogator.email,
-        "Answers for question on game #{@game.id}",
+        game.interrogator.email,
+        "Answers for question on game #{game.id}",
         Templates::ANSWER % context
       )
     end
 
-    def reject_answer(user, answer)
+    def reject_answer(game, user, answer)
       send_email_to(
         user.email,
         "Rejected answer",
@@ -80,14 +79,14 @@ module Impostor
       )
     end
 
-    def win
+    def win(game)
       send_email_to(
-        @game.interrogator.email,
+        game.interrogator.email,
         "You Win!",
         Templates::INTERROGATOR_WIN
       )
 
-      [@game.impostor, @game.honest].each do |user|
+      [game.impostor, game.honest].each do |user|
         send_email_to(
           user.email,
           "You Lose :-(",
@@ -96,14 +95,14 @@ module Impostor
       end
     end
 
-    def lose
+    def lose(game)
       send_email_to(
-        @game.interrogator.email,
+        game.interrogator.email,
         "You Lose :-(",
         Templates::INTERROGATOR_LOSE
       )
 
-      [@game.impostor, @game.honest].each do |user|
+      [game.impostor, game.honest].each do |user|
         send_email_to(
           user.email,
           "You Win!",
@@ -157,17 +156,17 @@ module Impostor
 
     private
 
-    def send_info_to_interrogator
-      interrogator  = @game.interrogator.email
+    def send_info_to_interrogator(game)
+      interrogator  = game.interrogator.email
 
       context = {
-        game_id: @game.id,
-        email_a: @game.player_a.user.email,
-        username_a: @game.player_a.user.username,
-        description_a: @game.player_a.user.description,
-        email_b: @game.player_b.user.email,
-        username_b: @game.player_b.user.username,
-        description_b: @game.player_b.user.description,
+        game_id: game.id,
+        email_a: game.player_a.user.email,
+        username_a: game.player_a.user.username,
+        description_a: game.player_a.user.description,
+        email_b: game.player_b.user.email,
+        username_b: game.player_b.user.username,
+        description_b: game.player_b.user.description,
       }
 
       send_email_to(
@@ -177,16 +176,16 @@ module Impostor
       )
     end
 
-    def send_info_to_impostor
-      impostor = @game.impostor.email
+    def send_info_to_impostor(game)
+      impostor = game.impostor.email
 
       context = {
-        interrogator_username: @game.interrogator.username,
-        interrogator_email: @game.interrogator.email,
-        other_username: @game.honest.username,
-        other_email: @game.honest.email,
+        interrogator_username: game.interrogator.username,
+        interrogator_email: game.interrogator.email,
+        other_username: game.honest.username,
+        other_email: game.honest.email,
         role: "impostor",
-        description: @game.honest.description,
+        description: game.honest.description,
       }
 
       send_email_to(
@@ -196,16 +195,16 @@ module Impostor
       )
     end
 
-    def send_info_to_honest
-      honest = @game.honest.email
+    def send_info_to_honest(game)
+      honest = game.honest.email
 
       context = {
-        interrogator_username: @game.interrogator.username,
-        interrogator_email: @game.interrogator.email,
-        other_username: @game.impostor.username,
-        other_email: @game.impostor.email,
+        interrogator_username: game.interrogator.username,
+        interrogator_email: game.interrogator.email,
+        other_username: game.impostor.username,
+        other_email: game.impostor.email,
         role: "honest",
-        description: @game.honest.description,
+        description: game.honest.description,
       }
 
       send_email_to(
