@@ -3,3 +3,4 @@
 Gemfile.lock
 .*.swp
 .*.swo
+config/mail_configuration.rb

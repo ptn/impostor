@@ -1,16 +1,17 @@
 require 'mail'
-require 'yaml'
 require 'impostor/templates'
+
+require_relative '../../config/mail_configuration'
 
 module Impostor
   class Mailer
-    def initialize(game=nil, config_file="~/.impostor/config.yaml")
+    def initialize(game=nil)
       @game = game
-      @config = parse_config(config_file)
-      @email_address = @config[:smtp][:user_name] + "@" + @config[:smtp][:domain]
+      @email_address = MailConfiguration::SMTP::USER_NAME + "@" +
+        MailConfiguration::SMTP::DOMAIN
 
-      configure_smtp @config[:smtp]
-      configure_pop3 @config[:pop3]
+      configure_smtp
+      configure_pop3
     end
 
     #
@@ -130,29 +131,31 @@ module Impostor
       end
     end
 
-    def configure_smtp(config)
+    def configure_smtp
       Mail.defaults do
-        delivery_method :smtp, config
+        delivery_method :smtp,
+          address:              MailConfiguration::SMTP::ADDRESS,
+          port:                 MailConfiguration::SMTP::PORT,
+          user_name:            MailConfiguration::SMTP::USER_NAME,
+          domain:               MailConfiguration::SMTP::DOMAIN,
+          password:             MailConfiguration::SMTP::PASSWORD,
+          authentication:       MailConfiguration::SMTP::AUTHENTICATION,
+          enable_starttls_auto: MailConfiguration::SMTP::ENABLE_STARTTLS_AUTO
       end
     end
 
-    def configure_pop3(config)
+    def configure_pop3
       Mail.defaults do
-        retriever_method :pop3, config
+        retriever_method :pop3,
+          address:    MailConfiguration::POP3::ADDRESS,
+          port:       MailConfiguration::POP3::PORT,
+          user_name:  MailConfiguration::POP3::USER_NAME,
+          password:   MailConfiguration::POP3::PASSWORD,
+          enable_ssl: MailConfiguration::POP3::ENABLE_SSL
       end
     end
 
     private
-
-    def parse_config(config_file)
-      file = File.expand_path(config_file)
-      config = YAML.load_file(file)
-
-      # Symbolize keys
-      config["smtp"] = config["smtp"].inject({}) { |memo, (k, v)| memo[k.to_sym] = v; memo }
-      config["pop3"] = config["pop3"].inject({}) { |memo, (k, v)| memo[k.to_sym] = v; memo }
-      config.inject({}) { |memo, (k, v)| memo[k.to_sym] = v; memo }
-    end
 
     def send_info_to_interrogator
       interrogator  = @game.interrogator.email
