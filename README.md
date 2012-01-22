@@ -54,3 +54,8 @@ chosen, they send `UNAVAILABLE` instead.
 
 * Players can send a new description of themselves by using `EDIT` as the 
   subject.
+
+## Running the server
+
+The file bin/impostor processes all unread email in the inbox (it is designed 
+to be configured as a cron job). 
