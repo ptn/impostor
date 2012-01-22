@@ -3,7 +3,9 @@ module Impostor
     module StoreProcs
       def store_procs_with(name, opts={})
         plural = opts[:plural] || name.to_s + "s"
-        hash = Hash.new &opts[:default]
+
+        opts[:default] ||= proc { nil }
+        hash = Hash.new { opts[:default] }
 
         metaclass = class << self; self; end
 

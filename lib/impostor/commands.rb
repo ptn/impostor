@@ -5,7 +5,7 @@ module Impostor
     extend Utils::StoreProcs
 
     #TODO Do real logging here.
-    store_procs_with :command, default: proc { proc { puts "Command unknown" } }
+    store_procs_with :command, default: proc { puts "Command unknown" }
 
     def initialize(presenter=Mailer.new)
       @presenter = presenter

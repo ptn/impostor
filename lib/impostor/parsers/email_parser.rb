@@ -5,13 +5,22 @@ module Impostor
     class EmailParser
       extend Utils::StoreProcs
 
-      store_procs_with :body_parser,
-        #FIXME Client code of StoreProcs should not know that it uses a hash,
-        #this breaks the encapsulation!
-        default: proc { |hash, key| proc { |body| { key => body } } }
+      store_procs_with :body_parser
 
       body_parser :edit do |body|
         { :description => body }
+      end
+
+      body_parser :question do |body|
+        { :question => body }
+      end
+
+      body_parser :answer do |body|
+        { :answer => body }
+      end
+
+      body_parser :guess do |body|
+        { :guess => body }
       end
 
       #
