@@ -11,19 +11,19 @@ module Impostor
       @presenter = presenter
     end
 
-    def run(name, sender, params, game)
+    def run(name, params, sender, game)
       if name == :register || !sender.nil?
-        commands[name].call sender, params, @presenter, game
+        commands[name].call @presenter, params, sender, game
       end
     end
 
-    command :start do |sender, params, presenter|
+    command :start do |presenter, params, sender|
       game = Game.start(sender)
 
       presenter.send_info(game)
     end
 
-    command :question do |sender, params, presenter, game|
+    command :question do |presenter, params, sender, game|
       if sender == game.interrogator
 
         #TODO Enforce that a game can only have one unanswered question at the
@@ -37,7 +37,7 @@ module Impostor
       end
     end
 
-    command :answer do |sender, params, presenter, game|
+    command :answer do |presenter, params, sender, game|
       if sender == game.impostor || sender == game.honest
         question = game.current_question
         player = Player.first(:user => sender, :game => game)
@@ -54,7 +54,7 @@ module Impostor
       end
     end
 
-    command :guess do |sender, params, presenter, game|
+    command :guess do |presenter, params, sender, game|
       if sender == game.interrogator
 
         if game.take_guess(params[:guess])
@@ -65,7 +65,7 @@ module Impostor
       end
     end
 
-    command :edit do |sender, params, presenter|
+    command :edit do |presenter, params, sender|
       sender.description = params[:description]
       sender.save
       presenter.confirm_new_description(sender)
