@@ -7,14 +7,15 @@ module Impostor
 
         metaclass = class << self; self; end
 
-        getter = -> { hash }
-        metaclass.instance_eval do
-          define_method plural, &getter
-        end
-
         setter = -> name, &callback { hash[name] = callback }
         metaclass.instance_eval do
           define_method name, &setter
+        end
+
+        getter = -> { hash }
+        instance_eval do
+          define_method plural, &getter
+          private plural
         end
       end
     end

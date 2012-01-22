@@ -1,13 +1,13 @@
 require_relative 'utils'
 
 module Impostor
-  module Commands
+  class Command
     extend Utils::StoreProcs
 
     #TODO Do real logging here.
     store_procs_with :command, default: proc { proc { puts "Command unknown" } }
 
-    def self.run(name, sender, params, game)
+    def run(name, sender, params, game)
       if name == :register || !sender.nil?
         commands[name].call sender, params, game
       end

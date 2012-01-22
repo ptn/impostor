@@ -2,7 +2,7 @@ require_relative '../utils'
 
 module Impostor
   module Parsers
-    module EmailParser
+    class EmailParser
       extend Utils::StoreProcs
 
       store_procs_with :body_parser,
@@ -28,7 +28,7 @@ module Impostor
       #
       # FIXME: breaks with HTML, should strip signatures, etc.
       #
-      def self.parse(from, subject, body)
+      def parse(from, subject, body)
         name, game_id = subject.split
 
         name = name.downcase.to_sym
