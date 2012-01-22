@@ -1,0 +1,21 @@
+module Impostor
+  module MailConfiguration
+    module SMTP
+      ADDRESS              = "smtp.gmail.com"
+      PORT                 = 587
+      USER_NAME            = "YOUR USERNAME"
+      DOMAIN               = "gmail.com"
+      PASSWORD             = "YOUR PASSWORD"
+      AUTHENTICATION       = "plain"
+      ENABLE_STARTTLS_AUTO = true
+    end
+
+    module POP3
+      ADDRESS    = "pop.gmail.com"
+      PORT       = 995
+      USER_NAME  = "YOU.USERNAME@gmail.com"
+      PASSWORD   = "YOUR PASSWORD"
+      ENABLE_SSL = true
+    end
+  end
+end
