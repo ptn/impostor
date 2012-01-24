@@ -33,7 +33,7 @@ module Impostor
 
       def parse_body(body, opts)
         cmd = opts[:for]
-        if cmd && respond_to?(cmd)
+        if cmd && respond_to?(cmd, true)
           send cmd, body
         else
           default_body_parser(body)

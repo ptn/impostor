@@ -19,7 +19,7 @@ module Impostor
     private
 
     def execute(cmd, sender, game, params)
-      if respond_to?(cmd)
+      if respond_to?(cmd, true)
         send cmd, sender, game, params
       else
         unknown_command
