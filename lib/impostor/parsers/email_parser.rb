@@ -1,5 +1,3 @@
-require_relative '../utils'
-
 module Impostor
   module Parsers
     class EmailParser
@@ -35,7 +33,7 @@ module Impostor
 
       def parse_body(body, opts)
         cmd = opts[:for]
-        if cmd && respond_to? cmd
+        if cmd && respond_to?(cmd)
           send cmd, body
         else
           default_body_parser(body)

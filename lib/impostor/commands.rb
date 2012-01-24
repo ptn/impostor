@@ -1,5 +1,3 @@
-require_relative 'utils'
-
 module Impostor
   class Command
     # Convenience so that client code doesn't have to instantiate an object
@@ -21,7 +19,7 @@ module Impostor
     private
 
     def execute(cmd, sender, game, params)
-      if respond_to? cmd
+      if respond_to?(cmd)
         send cmd, sender, game, params
       else
         unknown_command
