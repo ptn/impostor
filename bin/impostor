@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/impostor'
 require_relative '../config/mail_configuration'
+require_relative '../config/db_configuration'
+require_relative '../lib/impostor'
 
 Impostor::Server.process :all

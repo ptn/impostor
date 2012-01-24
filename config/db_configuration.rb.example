@@ -1,0 +1,6 @@
+module Impostor
+  module DbConfiguration
+    LOG_FILE = "/home/USERNAME/.impostor/db.log"
+    DB_URL   = "sqlite:///home/USERNAME/.impostor/impostor.db"
+  end
+end
