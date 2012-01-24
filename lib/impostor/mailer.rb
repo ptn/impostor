@@ -1,4 +1,5 @@
 require 'mail'
+require 'erb'
 
 require_relative 'templates'
 
@@ -28,93 +29,101 @@ module Impostor
     end
 
     def reject_question(game)
+      template = ERB.new(Templates.get('rejected_question'))
       send_email_to(
         game.interrogator.email,
         "Question rejected",
-        Templates::REJECTED_QUESTION
+        template.result
       )
     end
 
     def send_question(game, question)
-      context = {
-        question: question.text,
-        game_id: game.id,
-        description: game.honest.description,
-      }
+      question = question.text
+      game_id = game.id
+      description = game.honest.description
 
+      template = ERB.new(Templates.get("question"))
+
+      role = "impostor"
       send_email_to(
         game.impostor.email,
         "Game question",
-        Templates::QUESTION % context.merge({role: "impostor"})
+        template.result(binding)
       )
 
+      role = "honest"
       send_email_to(
         game.honest.email,
         "Game question",
-        Templates::QUESTION % context.merge({role: "honest"})
+        template.result(binding)
       )
     end
 
     def send_answers(game, question)
-      context = {
-        question: question.text,
-        answer_a: question.answer_a.text,
-        answer_b: question.answer_b.text,
-        game_id: game.id,
-      }
+      answer_a = question.answer_a.text
+      answer_b = question.answer_b.text
+      game_id = game.id
+
+      template = ERB.new(Templates.get("answer"))
 
       send_email_to(
         game.interrogator.email,
         "Answers for question on game #{game.id}",
-        Templates::ANSWER % context
+        template.result(binding)
       )
     end
 
     def reject_answer(game, user, answer)
+      template = ERB.new(Templates.get("rejected_answer"))
       send_email_to(
         user.email,
         "Rejected answer",
-        Templates::REJECTED_ANSWER % { answer: answer }
+        template.result(binding)
       )
     end
 
     def win(game)
+      template = ERB.new(Templates.get('interrogator_win'))
       send_email_to(
         game.interrogator.email,
         "You Win!",
-        Templates::INTERROGATOR_WIN
+        template.result
       )
 
       [game.impostor, game.honest].each do |user|
+      template = ERB.new(Templates.get('players_lose'))
         send_email_to(
           user.email,
           "You Lose :-(",
-          Templates::PLAYERS_LOSE
+          template.result
         )
       end
     end
 
     def lose(game)
+      template = ERB.new(Templates.get('interrogator_lose'))
       send_email_to(
         game.interrogator.email,
         "You Lose :-(",
-        Templates::INTERROGATOR_LOSE
+        template.result
       )
 
       [game.impostor, game.honest].each do |user|
+        template = ERB.new(Templates.get('players_win'))
         send_email_to(
           user.email,
           "You Win!",
-          Templates::PLAYERS_WIN
+          template.result
         )
       end
     end
 
     def confirm_new_description(sender)
+      template = ERB.new(Templates.get('new_description'))
       send_email_to(
         sender.email,
         "Your description was updated",
-        Templates::NEW_DESCRIPTION % { description: sender.description }
+        template.result(binding)
       )
     end
 
@@ -157,59 +166,43 @@ module Impostor
 
     def send_info_to_interrogator(game)
       interrogator  = game.interrogator.email
-
-      context = {
-        game_id: game.id,
-        email_a: game.player_a.user.email,
-        username_a: game.player_a.user.username,
-        description_a: game.player_a.user.description,
-        email_b: game.player_b.user.email,
-        username_b: game.player_b.user.username,
-        description_b: game.player_b.user.description,
-      }
-
+      template = ERB.new(Templates.get("info_to_interrogator"))
       send_email_to(
         interrogator,
         "New game starting!",
-        Templates::INFO_TO_INTERROGATOR % context
+        template.result(binding)
       )
     end
 
     def send_info_to_impostor(game)
       impostor = game.impostor.email
+      other_username = game.honest.username
+      other_email = game.honest.email
+      description = game.honest.description
+      role = "impostor"
 
-      context = {
-        interrogator_username: game.interrogator.username,
-        interrogator_email: game.interrogator.email,
-        other_username: game.honest.username,
-        other_email: game.honest.email,
-        role: "impostor",
-        description: game.honest.description,
-      }
+      template = ERB.new(Templates.get("info_to_player"))
 
       send_email_to(
         impostor,
         "New game starting!",
-        Templates::INFO_TO_PLAYER % context
+        template.result(binding)
       )
     end
 
     def send_info_to_honest(game)
       honest = game.honest.email
+      other_username = game.impostor.username
+      other_email = game.impostor.email
+      description = game.honest.description
+      role = "honest"
 
-      context = {
-        interrogator_username: game.interrogator.username,
-        interrogator_email: game.interrogator.email,
-        other_username: game.impostor.username,
-        other_email: game.impostor.email,
-        role: "honest",
-        description: game.honest.description,
-      }
+      template = ERB.new(Templates.get("info_to_player"))
 
       send_email_to(
         honest,
         "New game starting!",
-        Templates::INFO_TO_PLAYER % context
+        template.result(binding)
       )
     end
   end

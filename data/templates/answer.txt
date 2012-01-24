@@ -1,0 +1,18 @@
+Your latest question was:
+
+<%= question.text %>
+
+Here are the answers of both players:
+
+Player A:
+<%= answer_a %>
+
+Player B:
+<%= answer_b %>
+
+
+To ask another question, send me email with subject "QUESTION <%= game_id %>".
+
+To take your guess, send me email with subject "GUESS <%= game_id %>" and
+the username of which player (A or B) you think is the impersonator.
+

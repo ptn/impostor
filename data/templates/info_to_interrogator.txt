@@ -1,0 +1,17 @@
+Hi, the new game you requested has started!
+
+To start asking, send me mail with subject "QUESTION <%= game.id %>"
+
+You will be playing with the following two players:
+
+<%= game.player_a.user.username %>
+<%= game.player_a.user.email %>
+
+<%= game.player_a.user.description %>
+
+<%= game.player_b.user.username %>
+<%= game.player_b.user.email %>
+
+<%= game.player_b.user.description %>
+
+Good luck!

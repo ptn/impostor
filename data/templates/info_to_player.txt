@@ -1,0 +1,12 @@
+Hi, you have been chosen to participate in a new game!
+
+The game was started by <%= game.interrogator.username %> 
+(<%= game.interrogator.email %>), the other player will be <%= other_username %>
+(<%= other_email %>).
+
+You will be the <%=role%> player, so here's the description you have to play by:
+
+<%= description %>
+
+Good luck!
+

@@ -1,0 +1,6 @@
+We are sorry, your answer:
+
+<%= answer %>
+
+was rejected, because you can't answer the same question more than once.
+
