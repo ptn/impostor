@@ -2,6 +2,12 @@ require_relative 'utils'
 
 module Impostor
   class Command
+    # Convenience so that client code doesn't have to instantiate an object
+    # only to throw it away the next second.
+    def self.run(*args)
+      new.run(*args)
+    end
+
     def initialize(presenter=Mailer.new)
       @presenter = presenter
     end
