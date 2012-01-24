@@ -2,73 +2,82 @@ require_relative 'utils'
 
 module Impostor
   class Command
-    extend Utils::StoreProcs
-
-    #TODO Do real logging here.
-    store_procs_with :command, default: proc { puts "Command unknown" }
-
     def initialize(presenter=Mailer.new)
       @presenter = presenter
     end
 
-    def run(name, params, sender, game)
-      if name == :register || !sender.nil?
-        commands[name].call @presenter, params, sender, game
+    def run(cmd, params, sender, game)
+      if cmd == :register || !sender.nil?
+        execute cmd, sender, game, params
       end
     end
 
-    command :start do |presenter, params, sender|
-      game = Game.start(sender)
+    private
 
-      presenter.send_info(game)
+    def execute(cmd, sender, game, params)
+      if respond_to? cmd
+        send cmd, sender, game, params
+      else
+        unknown_command
+      end
     end
 
-    command :question do |presenter, params, sender, game|
+    #TODO Do real logging here.
+    def unknown_command
+      puts "Unknown command"
+    end
+
+    def start(sender, game, params)
+      game = Game.start(sender)
+      @presenter.send_info(game)
+    end
+
+    def question(sender, game, params)
       if sender == game.interrogator
 
         #TODO Enforce that a game can only have one unanswered question at the
         #model layer.
         if game.current_question
-          presenter.reject_question(game)
+          @presenter.reject_question(game)
         else
-          question = Question.create(:text => params[:question], :game => game)
-          presenter.send_question(game, question)
+          question = Question.create(:text => params[:match], :game => game)
+          @presenter.send_question(game, question)
         end
       end
     end
 
-    command :answer do |presenter, params, sender, game|
+    def answer(sender, game, params)
       if sender == game.impostor || sender == game.honest
         question = game.current_question
         player = Player.first(:user => sender, :game => game)
 
-        answer = question.add_answer(params[:answer], player)
+        answer = question.add_answer(params[:match], player)
 
         if answer
           if question.answered?
-            presenter.send_answers(game, question)
+            @presenter.send_answers(game, question)
           end
         else
-          presenter.reject_answer(game, sender, params[:answer])
+          @presenter.reject_answer(game, sender, params[:match])
         end
       end
     end
 
-    command :guess do |presenter, params, sender, game|
+    def guess(sender, game, params)
       if sender == game.interrogator
 
-        if game.take_guess(params[:guess])
-          presenter.win(game)
+        if game.take_guess(params[:match])
+          @presenter.win(game)
         else
-          presenter.lose(game)
+          @presenter.lose(game)
         end
       end
     end
 
-    command :edit do |presenter, params, sender|
-      sender.description = params[:description]
+    def edit(sender, game, params)
+      sender.description = params[:match]
       sender.save
-      presenter.confirm_new_description(sender)
+      @presenter.confirm_new_description(sender)
     end
   end
 end
